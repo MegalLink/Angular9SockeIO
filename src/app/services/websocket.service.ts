@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
   public socketStatus=false;
+  public usuario:Usuario;
   constructor(private socket: Socket) { 
     this.checkStatus();
   }
+  //ESTADO SERVIDOR
   checkStatus(){
     this.socket.on('connect',()=>{
       console.log('Conectado al servidor');
@@ -20,13 +23,20 @@ export class WebsocketService {
     });
   }
 //EMITE CUALQUIER EVENTO
-  emit(evento:string,payload?:any,callback?:()=>{}){
-    console.log("Emitiendo evento")
+  emit(evento:string,payload?:any,callback?:Function){
+    console.log(`Emitiendo ${evento}`)
       this.socket.emit(evento,payload,callback);
   }
   //ESCUCHA CUALQUIER EVENTO
   listen(evento:string){
     return this.socket.fromEvent(evento);
 
+  }
+  //LOGIN
+  loginWs(nombre:string){
+    console.log("Configurando",nombre)
+    this.emit('configurar-usuario',{nombre},resp=>{
+      console.log(resp)
+    });
   }
 }
