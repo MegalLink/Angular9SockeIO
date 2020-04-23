@@ -10,13 +10,23 @@ export class ChatService {
 
   sendMessage(mensaje:string){
     const payload={
-      de: 'Jeferson',
+      de: this.wsS.getUsuario().nombre,
       cuerpo: mensaje
     };
     this.wsS.emit('mensaje',payload);
   }
   getMessages(){
     return this.wsS.listen('mensaje-nuevo');
+  }
+
+  getMessagesPrivate(){
+    return this.wsS.listen('mensaje-privado');
+  }
+  getUsuariosActivos(){
+    return this.wsS.listen('usuarios-activos');
+  }
+  emitirUsuariosActivos(){
+    this.wsS.emit('obtener-usuarios');
   }
  
 }
